@@ -1,5 +1,5 @@
 class OwnershipTypesController < ApplicationController
-  before_action :set_ownership_type, only: %i[ show update destroy ]
+  before_action :set_ownership_type, only: %i[show update destroy]
 
   # GET /ownership_types
   def index
@@ -39,13 +39,14 @@ class OwnershipTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ownership_type
-      @ownership_type = OwnershipType.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def ownership_type_params
-      params.require(:ownership_type).permit(:name, :description)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_ownership_type
+    @ownership_type = OwnershipType.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def ownership_type_params
+    params.require(:ownership_type).permit(:name, :description)
+  end
 end
