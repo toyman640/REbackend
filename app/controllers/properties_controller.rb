@@ -1,5 +1,5 @@
 class PropertiesController < ApplicationController
-  before_action :set_property, only: %i[ show update destroy ]
+  before_action :set_property, only: %i[show update destroy]
 
   # GET /properties
   def index
@@ -44,18 +44,20 @@ class PropertiesController < ApplicationController
 
   private
 
-    def attach_images(images)
-      images.each do |image|
-        @property.images.attach(image)
-      end
+  def attach_images(images)
+    images.each do |image|
+      @property.images.attach(image)
     end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_property
-      @property = Property.find(params[:id])
-    end
+  end
 
-    # Only allow a list of trusted parameters through.
-    def property_params
-      params.require(:property).permit(:title, :price, :no_of_rooms, :property_type_id, :ownership_type_id, :description, :address, :no_of_bathrooms, images: [])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_property
+    @property = Property.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def property_params
+    params.require(:property).permit(:title, :price, :no_of_rooms, :property_type_id, :ownership_type_id,
+                                     :description, :address, :no_of_bathrooms, images: [])
+  end
 end

@@ -4,5 +4,5 @@ class Property < ApplicationRecord
   has_many_attached :images
 
   validates :title, presence: true
-  validates :price, presence: true, numericality: {greater_than: 0}
+  validates :price, presence: true, numericality: { greater_than: 0 }
 end
