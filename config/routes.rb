@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :properties
   resources :ownership_types
   resources :property_types
   get 'current_user', to: 'current_user#index'
