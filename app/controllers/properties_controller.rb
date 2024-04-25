@@ -10,13 +10,17 @@ class PropertiesController < ApplicationController
 
   # GET /properties/1
   def show
-    render json: @property
+    render json: @property.as_json(include: :images).merge(
+      images: @property.images.map do |image|
+        url_for(image)
+      end
+    )
   end
 
   # POST /properties
   def create
-    @property = Property.new(property_params)
-
+    @property = Property.new(property_params.except(:images))
+    attach_images(params[:property][:images]) if params[:property][:images].present?
     if @property.save
       render json: @property, status: :created, location: @property
     else
@@ -39,6 +43,12 @@ class PropertiesController < ApplicationController
   end
 
   private
+
+    def attach_images(images)
+      images.each do |image|
+        @property.images.attach(image)
+      end
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_property
       @property = Property.find(params[:id])
@@ -46,6 +56,6 @@ class PropertiesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def property_params
-      params.require(:property).permit(:title, :price, :no_of_rooms, :property_type_id, :ownership_type_id, :description, :address, :no_of_bathrooms)
+      params.require(:property).permit(:title, :price, :no_of_rooms, :property_type_id, :ownership_type_id, :description, :address, :no_of_bathrooms, images: [])
     end
 end
