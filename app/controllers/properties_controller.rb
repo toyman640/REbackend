@@ -20,7 +20,10 @@ class PropertiesController < ApplicationController
   # POST /properties
   def create
     @property = Property.new(property_params.except(:images))
-    attach_images(params[:property][:images]) if params[:property][:images].present?
+    images = params[:property][:images]
+    images&.each do |image|
+      @property.images.attach(image)
+    end
     if @property.save
       render json: @property, status: :created, location: @property
     else
