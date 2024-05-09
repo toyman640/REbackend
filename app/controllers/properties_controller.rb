@@ -20,7 +20,10 @@ class PropertiesController < ApplicationController
   # POST /properties
   def create
     @property = Property.new(property_params.except(:images))
-    attach_images(params[:property][:images]) if params[:property][:images].present?
+    images = params[:property][:images]
+    images&.each do |image|
+      @property.images.attach(image)
+    end
     if @property.save
       render json: @property, status: :created, location: @property
     else
@@ -58,6 +61,6 @@ class PropertiesController < ApplicationController
   # Only allow a list of trusted parameters through.
   def property_params
     params.require(:property).permit(:title, :price, :no_of_rooms, :property_type_id, :ownership_type_id,
-                                     :description, :address, :no_of_bathrooms, images: [])
+                                     :description, :created_by_id, :address, :no_of_bathrooms, images: [])
   end
 end
