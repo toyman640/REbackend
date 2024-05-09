@@ -55,11 +55,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_25_115737) do
     t.integer "no_of_rooms"
     t.bigint "property_type_id", null: false
     t.bigint "ownership_type_id", null: false
+    t.bigint "created_by_id", null: false
     t.text "description"
     t.string "address"
     t.integer "no_of_bathrooms"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_properties_on_created_by_id"
     t.index ["ownership_type_id"], name: "index_properties_on_ownership_type_id"
     t.index ["property_type_id"], name: "index_properties_on_property_type_id"
   end
@@ -89,4 +91,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_25_115737) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "properties", "ownership_types"
   add_foreign_key "properties", "property_types"
+  add_foreign_key "properties", "users", column: "created_by_id"
 end
