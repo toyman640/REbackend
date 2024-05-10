@@ -50,6 +50,7 @@ class PropertiesController < ApplicationController
 
   # DELETE /properties/1
   def destroy
+    @property.images.each(&:purge)
     @property.destroy!
   end
 
