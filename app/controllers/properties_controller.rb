@@ -5,36 +5,25 @@ class PropertiesController < ApplicationController
     @properties = Property.includes(:created_by, :property_type, :ownership_type)
     render json: @properties.as_json(
       include: {
-        created_by: { only: [:id, :email] },
-        property_type: { only: [:id, :name] },
-        ownership_type: { only: [:id, :name] }
+        created_by: { only: %i[id email] },
+        property_type: { only: %i[id name] },
+        ownership_type: { only: %i[id name] }
       }
     )
   end
 
-  # GET /properties/1
-  # def show
-  #   render json: @property.as_json(include: :images).merge(
-  #     images: @property.images.map do |image|
-  #       url_for(image)
-  #     end
-  #   )
-  # end
-
   def show
     render json: {
       property: @property.as_json(
-        include: { 
-          created_by: { only: [:id, :email] }, 
-          ownership_type: { only: [:id, :name] }, 
-          property_type: { only: [:id, :name] }
+        include: {
+          created_by: { only: %i[id email] },
+          ownership_type: { only: %i[id name] },
+          property_type: { only: %i[id name] }
         }
       ),
       images: @property.images.map { |image| url_for(image) }
     }
   end
-  
-  
 
   # POST /properties
   def create
