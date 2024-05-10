@@ -1,20 +1,28 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[show update destroy]
 
-  # GET /properties
   def index
-    @properties = Property.all
-
-    render json: @properties
+    @properties = Property.includes(:created_by, :property_type, :ownership_type)
+    render json: @properties.as_json(
+      include: {
+        created_by: { only: %i[id email] },
+        property_type: { only: %i[id name] },
+        ownership_type: { only: %i[id name] }
+      }
+    )
   end
 
-  # GET /properties/1
   def show
-    render json: @property.as_json(include: :images).merge(
-      images: @property.images.map do |image|
-        url_for(image)
-      end
-    )
+    render json: {
+      property: @property.as_json(
+        include: {
+          created_by: { only: %i[id email] },
+          ownership_type: { only: %i[id name] },
+          property_type: { only: %i[id name] }
+        }
+      ),
+      images: @property.images.map { |image| url_for(image) }
+    }
   end
 
   # POST /properties
