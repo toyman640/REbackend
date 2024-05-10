@@ -1,12 +1,6 @@
 class PropertiesController < ApplicationController
   before_action :set_property, only: %i[show update destroy]
 
-  # GET /properties
-  # def index
-  #   @properties = Property.all
-
-  #   render json: @properties
-  # end
   def index
     @properties = Property.includes(:created_by, :property_type, :ownership_type)
     render json: @properties.as_json(
