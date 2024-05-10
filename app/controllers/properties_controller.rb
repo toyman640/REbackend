@@ -13,13 +13,28 @@ class PropertiesController < ApplicationController
   end
 
   # GET /properties/1
+  # def show
+  #   render json: @property.as_json(include: :images).merge(
+  #     images: @property.images.map do |image|
+  #       url_for(image)
+  #     end
+  #   )
+  # end
+
   def show
-    render json: @property.as_json(include: :images).merge(
-      images: @property.images.map do |image|
-        url_for(image)
-      end
-    )
+    render json: {
+      property: @property.as_json(
+        include: { 
+          created_by: { only: [:id, :email] }, 
+          ownership_type: { only: [:id, :name] }, 
+          property_type: { only: [:id, :name] }
+        }
+      ),
+      images: @property.images.map { |image| url_for(image) }
+    }
   end
+  
+  
 
   # POST /properties
   def create
